@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mycompany</groupId>
+    <artifactId>roteiro_SQLite</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Roteiro JDBC + SQLite</name>
+    <description>
+        Projeto de apoio ao roteiro didático "Java (JDK 26) + SQLite via JDBC" —
+        UNIP Ribeirão Preto, Ciência da Computação, 2º período.
+    </description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>26</maven.compiler.release>
+        <exec.mainClass>com.mycompany.roteiro_sqlite.Roteiro_SQLite</exec.mainClass>
+    </properties>
+
+    <dependencies>
+        <!-- Driver JDBC puro-Java para SQLite. -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.53.2.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
+            </plugin>
+            <!--
+                Permite "mvn exec:java" para rodar o menu sem precisar montar
+                o classpath manualmente.
+
+                Nota (Módulo 1): ao rodar, o JDK pode imprimir um aviso do
+                tipo "WARNING: A restricted method in java.lang.System has
+                been called" — é o sqlite-jdbc carregando sua biblioteca
+                nativa via System.load, algo que o JDK 24+ passou a avisar
+                (JEP 472). NÃO é um erro: o programa continua funcionando
+                normalmente. Para silenciá-lo ao executar o .jar final, use
+                a opção de JVM "enable-native-access=ALL-UNNAMED".
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
