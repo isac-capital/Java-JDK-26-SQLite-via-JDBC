@@ -26,17 +26,23 @@ public final class Ex03_Create {
         System.out.println("Disciplina inserida com id = " + idGerado);
     }
 
-    /**
-     * TODO(Ex03): monte o INSERT com PreparedStatement, execute-o e
-     * devolva o id gerado com Statement.RETURN_GENERATED_KEYS +
-     * getGeneratedKeys(). Consulte M03_Create para o padrão a seguir.
-     */
     static int inserirDisciplina(String nome, int cargaHoraria) throws SQLException {
-        // Dica: comece copiando a estrutura de M03_Create.executar() e
-        // adapte o SQL para a tabela "disciplina" (colunas: nome, carga_horaria).
-        try (Connection conexao = Conexao.obterConexao()) {
-            throw new UnsupportedOperationException(
-                    "TODO(Ex03): implemente inserirDisciplina usando " + conexao.getClass().getSimpleName());
+        String sql = "INSERT INTO disciplina (nome, carga_horaria) VALUES (?, ?)";
+
+        try (Connection conexao = Conexao.obterConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, nome);
+            stmt.setInt(2, cargaHoraria);
+
+            stmt.executeUpdate();
+
+            try (ResultSet chaves = stmt.getGeneratedKeys()) {
+                if (chaves.next()) {
+                    return chaves.getInt(1);
+                }
+            }
         }
+        return -1;
     }
 }
