@@ -34,9 +34,14 @@ public final class Ex05_UpdateDelete {
      * true se executeUpdate() indicar que 1 (ou mais) linha foi afetada.
      */
     static boolean lancarNota(int matriculaId, double nota) throws SQLException {
-        try (Connection conexao = Conexao.obterConexao()) {
-            throw new UnsupportedOperationException(
-                    "TODO(Ex05-a): implemente lancarNota usando " + conexao.getClass().getSimpleName());
+        String sql = "UPDATE matricula SET nota = ? WHERE id = ?";
+        try (Connection conexao = Conexao.obterConexao(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(2, matriculaId);
+            stmt.setDouble(1, nota);
+            int linha = stmt.executeUpdate();
+            return linha > 0;
+           // throw new UnsupportedOperationException(
+             //       "TODO(Ex05-a): implemente lancarNota usando " + conexao.getClass().getSimpleName());
         }
     }
 
@@ -47,9 +52,14 @@ public final class Ex05_UpdateDelete {
      */
     static boolean cancelarMatricula(int matriculaId) throws SQLException {
         try (Connection conexao = Conexao.obterConexao();
-             PreparedStatement stmt = conexao.prepareStatement("SELECT 1")) {
-            throw new UnsupportedOperationException(
-                    "TODO(Ex05-b): implemente cancelarMatricula (stmt de exemplo: " + stmt + ")");
+             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM matricula Where id = ?")) {
+             stmt.setInt(1 ,matriculaId);
+             int linha = stmt.executeUpdate();
+             
+             return linha > 0;
+             
+           // throw new UnsupportedOperationException(
+                  //  "TODO(Ex05-b): implemente cancelarMatricula (stmt de exemplo: " + stmt + ")");
         }
     }
 }
